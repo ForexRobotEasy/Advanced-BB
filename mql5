@@ -1,0 +1,127 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                            Advanced BB Forex.mq5 |
+//|                        Copyright 2022, Forex Robot Easy Team     |
+//|                                        https://www.forexroboteasy.com |
+//+------------------------------------------------------------------+
+
+// Input parameters
+input int Loss_Percent = 2;
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+   // Check for volatility increase and ATR alignment
+   if(IsVolatilityIncreased() && IsATRAligned())
+   {
+      // Enter trade
+      OpenTrade();
+   }
+   
+   // Check for high volatility and no trend
+   if(IsHighVolatility() && IsNoTrend())
+   {
+      // Implement mean reversion strategy
+      ImplementMeanReversion();
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsVolatilityIncreased()
+{
+   // Perform Bollinger Band analysis to identify price imbalances
+   
+   // Calculate Bollinger Bands
+   double upperBand[], middleBand[], lowerBand[];
+   iBands(_Symbol, PERIOD_M15, 20, 2, 0, PRICE_CLOSE, upperBand, middleBand, lowerBand);
+   
+   // Check if price is above upper band
+   if(iClose(_Symbol, PERIOD_M15, 0) > upperBand[0])
+   {
+      // Calculate ATR
+      double atr = iATR(_Symbol, PERIOD_M15, 14, 0);
+      
+      // Check if ATR value is greater than pre-set parameters
+      if(atr > 0.001)
+         return true;
+   }
+   
+   return false;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsATRAligned()
+{
+   // Calculate ATR
+   double atr = iATR(_Symbol, PERIOD_M15, 14, 0);
+   
+   // Check if ATR value is aligned with pre-set parameters
+   if(atr > 0.001)
+      return true;
+   
+   return false;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OpenTrade()
+{
+   // Place trade entry logic here
+   // ...
+   
+   // Calculate the maximum loss per trade
+   double maxLoss = AccountBalance() * Loss_Percent / 100;
+   
+   // Place stop loss and take profit levels
+   double stopLoss = Bid - 50 * _Point;
+   double takeProfit = Bid + 100 * _Point;
+   
+   // Place buy order
+   OrderSend(_Symbol, OP_BUY, 0.1, Bid, 5, stopLoss, takeProfit, 'Buy order', 0, 0, clrGreen);
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsHighVolatility()
+{
+   // Calculate ATR
+   double atr = iATR(_Symbol, PERIOD_M15, 14, 0);
+   
+   // Check if ATR value is greater than pre-set parameters
+   if(atr > 0.001)
+      return true;
+   
+   return false;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsNoTrend()
+{
+   // Check for no trend condition
+   // ...
+   
+   return false;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void ImplementMeanReversion()
+{
+   // Implement mean reversion strategy
+   // ...
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
